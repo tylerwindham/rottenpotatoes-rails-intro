@@ -12,22 +12,28 @@ class MoviesController < ApplicationController
 
   def index
     @all_ratings = ['G', 'PG', 'PG-13', 'R']
+    #Used for persisting check boxes
     @selected = {}
+    #If we have rations or a column header in session apply sort or filtering
     if (!params[:ratings] && !params[:sort] && (session[:ratings] || session[:sort]))
       redirect_to movies_path(:ratings => session[:ratings], :sort => session[:sort] )
     end
     @movies = Movie.all
+    #If we have ratings, only get those movies
     if(params[:ratings])
       condition = params[:ratings].keys
       @movies = Movie.all.order(params[:sort]).where(:rating => condition)
       puts "RATINGS"
     end
+    
+    #Highlight the clicked column header
     if params[:sort] == 'title'
       @title_header = 'hilite'
     elsif params[:sort] == 'release_date'
       @release_header = 'hilite'
     end
    
+   #Set values for checkboxes that were selected
     @all_ratings.each do |rating| 
       if !params[:ratings]
         @selected[rating] = true
@@ -37,6 +43,8 @@ class MoviesController < ApplicationController
         end 
       end 
     end
+    
+    #Store sort and rating data in session
     session[:sort] = params[:sort]
     session[:ratings] = params[:ratings]
   end
