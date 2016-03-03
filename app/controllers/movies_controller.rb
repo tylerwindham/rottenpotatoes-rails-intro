@@ -14,7 +14,7 @@ class MoviesController < ApplicationController
     @all_ratings = ['G', 'PG', 'PG-13', 'R']
     #Used for persisting check boxes
     @selected = {}
-    #If we have rations or a column header in session apply sort or filtering
+    #If we have ratings or a column header in session apply sort or filtering
     if (!params[:ratings] && !params[:sort] && (session[:ratings] || session[:sort]))
       redirect_to movies_path(:ratings => session[:ratings], :sort => session[:sort] )
     end
